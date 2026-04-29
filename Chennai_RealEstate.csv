@@ -1,0 +1,41 @@
+Locality,Property Type,Built-up Area (sqft),Price per Sqft (INR),Bedrooms (BHK),Bathrooms,Property Age (Years),Facing,Furnishing Status,Parking Facility Yes/No,Distance to Metro (km),Distance to IT Hub (km),Nearby Schools (count),Nearby Hospitals (count),Monthly Maintenance (INR),Estimated Sale Price (INR),Rental Yield (%),Buyer Attraction Score (1-10)
+Adyar,Apartment,1520,10850,2.4,2.6,15,East,Fully Furnished,Yes,4.1,7.8,5,3,3300,18600000,3.6,7.7
+Anna Nagar,Villa,1750,10450,3,3.4,13,West,Fully Furnished,Yes,4,7.6,4,4,3900,21000000,3.8,8
+Chrompet,Villa,1450,10400,2.8,3.2,17,West,Fully Furnished,Yes,4.6,7.2,5,3,3000,15500000,3.6,7.5
+Karapakkam,Independent House,1650,10450,2.7,3.2,17,South,Semi-Furnished,Yes,4,8.7,4,2,3650,19800000,3.5,7.6
+KK Nagar,Apartment,1500,10900,2.6,3.1,16,East,Fully Furnished,Yes,4.1,8.7,5,3,3500,18800000,3.5,7.3
+OMR,Villa,1850,10320,3,3.5,13,West,Fully Furnished,Yes,4.2,7.2,5,4,4100,19500000,3.8,7.8
+Porur,Apartment,1450,11020,2.4,2.8,19,West,Fully Furnished,Yes,4.9,9.5,5,3,3300,18700000,3.5,7.2
+Tambaram,Apartment,1630,10300,2.8,3.2,15,South,Fully Furnished,Yes,4.1,8.5,5,3,3700,17600000,3.7,7.8
+T Nagar,Villa,1600,11200,2.8,3.2,16,East,Fully Furnished,Yes,3.6,8.1,5,4,3700,21500000,3.6,8
+Velachery,Apartment,1600,10100,2.6,3,15,East,Unfurnished,No,3.9,8.9,5,3,3700,18500000,3.6,7.9
+Adyar,Independent House,1580,10300,2.6,2.9,17,North,Unfurnished,No,4.5,8.8,4,2,3400,18900000,3.4,7.4
+Anna Nagar,Apartment,1650,10200,2.5,3,14,South,Semi-Furnished,Yes,4.2,8,5,3,3700,19800000,3.7,7.9
+Chrompet,Apartment,1400,9800,2.5,2.8,19,East,Unfurnished,No,5.1,7.9,4,2,2800,14800000,3.4,7.1
+Karapakkam,Apartment,1550,10600,2.4,2.8,18,West,Unfurnished,No,4.3,9.1,5,3,3500,19000000,3.3,7.3
+KK Nagar,Independent House,1550,10500,2.6,3,18,North,Unfurnished,No,4.6,9,4,2,3450,18900000,3.3,7.1
+OMR,Apartment,1700,10100,2.7,3.1,14,South,Semi-Furnished,Yes,4.5,7.6,4,3,3800,18200000,3.6,7.4
+Porur,Villa,1650,10600,2.9,3.3,17,East,Semi-Furnished,Yes,4.5,8.8,4,4,3600,19800000,3.7,7.6
+Tambaram,Apartment,1550,10000,2.5,2.9,16,West,Unfurnished,No,4.4,9,5,3,3500,17000000,3.5,7.5
+T Nagar,Apartment,1490,11070,2.3,2.7,17,North,Semi-Furnished,Yes,3.9,8.6,4,3,3480,20100000,3.4,7.7
+Velachery,Villa,1850,10200,3.1,3.7,13,South,Semi-Furnished,Yes,3.4,7.6,4,4,4200,21000000,3.9,8.4
+Adyar,Apartment,1480,11020,2.2,2.4,14,South,Fully Furnished,Yes,3.9,7.5,5,3,3200,17800000,3.5,7.8
+Anna Nagar,Independent House,1700,10050,2.7,3.2,16,East,Unfurnished,No,4.6,8.9,4,2,3550,20100000,3.5,7.6
+Chrompet,Apartment,1350,10200,2.6,3,18,North,Semi-Furnished,Yes,4.8,7.4,5,3,2900,15000000,3.5,7.3
+Karapakkam,Villa,1750,10820,2.9,3.4,16,North,Fully Furnished,Yes,4.1,8.4,4,4,3800,20500000,3.6,7.7
+KK Nagar,Apartment,1450,11020,2.4,2.9,17,South,Fully Furnished,Yes,4.3,8.9,5,3,3400,18200000,3.4,7.2
+OMR,Independent House,1750,10050,2.8,3.2,14,East,Semi-Furnished,Yes,4.6,7.9,5,2,3900,18500000,3.5,7.5
+Porur,Apartment,1500,10800,2.6,2.9,18,North,Unfurnished,Yes,4.7,9.2,5,3,3350,19100000,3.6,7.3
+Tambaram,Villa,1750,10120,3,3.6,14,North,Semi-Furnished,Yes,3.9,8,4,4,3950,18500000,3.8,8
+T Nagar,Apartment,1450,10900,2.2,2.5,18,South,Unfurnished,No,4.1,9,4,3,3400,19500000,3.3,7.4
+Velachery,Independent House,1750,10300,2.8,3.4,14,West,Fully Furnished,Yes,3.7,8.3,4,2,4000,19900000,3.7,8.1
+Anna Nagar,Apartment,1600,10180,2.4,2.9,15,North,Semi-Furnished,Yes,4.4,8.2,5,3,3600,19400000,3.6,7.8
+Chrompet,Independent House,1380,10100,2.6,3,18,South,Semi-Furnished,Yes,4.9,7.6,4,2,2950,15200000,3.5,7.4
+Karapakkam,Apartment,1600,11000,2.5,2.9,17,East,Semi-Furnished,Yes,3.8,8.9,5,3,3600,19600000,3.4,7.5
+KK Nagar,Villa,1600,10750,2.8,3.3,15,West,Semi-Furnished,Yes,4,8.2,4,4,3700,19500000,3.6,7.5
+OMR,Apartment,1650,9950,2.5,2.9,15,North,Unfurnished,No,4.8,8.1,4,3,3600,17500000,3.4,7.2
+Porur,Independent House,1550,10400,2.7,3.1,18,South,Unfurnished,No,4.8,9.1,4,2,3400,19200000,3.4,7.1
+Tambaram,Apartment,1630,10300,2.8,3.2,15,East,Fully Furnished,Yes,4.1,8.5,5,3,3700,17600000,3.7,7.8
+T Nagar,Villa,1600,11200,2.8,3.2,16,West,Fully Furnished,Yes,3.6,8.1,5,4,3700,21500000,3.6,8
+Velachery,Apartment,1600,10100,2.6,3,15,North,Unfurnished,No,3.9,8.9,5,3,3700,18500000,3.6,7.9
+Adyar,Villa,1620,10540,2.8,3.1,16,West,Semi-Furnished,Yes,4.3,8.2,4,4,3500,19200000,3.7,7.5
