@@ -1,57 +1,56 @@
 import streamlit as st
 import pandas as pd
 
-def show_state_view(state_df, city_df):
-    st.header("State-Level Dashboard")
+def show_city_summary_view(df):
+    st.header("City-Level Dashboard")
 
-    # Step 1: Get selected state from session
-    selected_state = st.session_state.get("selected_state")
-
-    if not selected_state:
-        st.warning("Please select a state from the India overview.")
+    # ✅ Step 1: Read selected city
+    if "selected_city" not in st.session_state:
+        st.warning("Please select a city first.")
         return
 
-    # Step 2: Filter state-level data
-    df_state = state_df[state_df["State / Union Territory"] == selected_state]
+    selected_city = st.session_state["selected_city"]
 
-    if df_state.empty:
-        st.error("No data available for the selected state.")
+    # ✅ Step 2: Filter data for city
+    city_df = df[df["City"] == selected_city]
+
+    if city_df.empty:
+        st.error("No data found for this city.")
         return
 
-    row = df_state.iloc[0]
+    st.subheader(f"📍 City: {selected_city}")
 
-    # Step 3: Display State Metrics
-    st.subheader(f"📍 {selected_state}")
-
+    # ✅ Step 3: City-level metrics
     col1, col2, col3 = st.columns(3)
 
     col1.metric(
-        "Price per Sqft (₹)",
-        f"₹{row['Price/sqft (₹)']:,}"
+        "Average Price / Sqft (₹)",
+        f"₹{int(city_df['Price per Sqft (INR)S'].mean()):,}"
     )
 
     col2.metric(
-        "Median Price 2025 (₹ Lakh)",
-        f"{row['Median House Price (₹ Lakh) -2025']:.2f}"
+        "Average Property Price (₹)",
+        f"₹{int(city_df['Estimated Sale Price (INR)'].mean()):,}"
     )
 
     col3.metric(
-        "YoY Growth (%)",
-        f"{row['YoY Price Growth (%)']*100:.2f}%"
+        "Average Rental Yield (%)",
+        f"{city_df['Rental Yield (%)'].mean():.2f}%"
     )
 
-    st.write("**Region:**", row["Region"])
-    st.write("**Market Tier:**", row["Market Tier"])
+    # ✅ Step 4: Extra insights
+    st.write("**Property Types Available:**")
+    st.write(list(city_df["Property Type"].unique()))
 
-    # Step 4: City Selection
-    available_cities = sorted(
-        city_df[city_df["City"].notna()]["City"].unique()
+    st.write("**Average Buyer Attraction Score:**",
+             round(city_df["Buyer Attraction Score (1-10)"].mean(), 2))
+
+    st.divider()
+
+    # ✅ Step 5: Locality selection (handoff to Person 3)
+    locality = st.selectbox(
+        "Select Locality for Detailed View",
+        sorted(city_df["Locality"].unique())
     )
 
-    selected_city = st.selectbox(
-        "Select a City",
-        available_cities
-    )
-
-    st.session_state.selected_city = selected_city
-  
+    st.session_state["selected_locality"] = locality
