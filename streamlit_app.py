@@ -1,129 +1,57 @@
 import streamlit as st
 import pandas as pd
 
-# --------------------------------
-# Page Config
-# --------------------------------
-st.set_page_config(
-    page_title="Indian Real Estate Market Dashboard",
-    layout="wide"
-)
+def show_state_view(state_df, city_df):
+    st.header("State-Level Dashboard")
 
-st.title("🏠 Indian Real Estate Market Dashboard")
-st.write("State and region-wise housing price analysis (2024–2025)")
+    # Step 1: Get selected state from session
+    selected_state = st.session_state.get("selected_state")
 
-# --------------------------------
-# Load and Clean CSV
-# --------------------------------
-@st.cache_data
-def load_data():
-    df = pd.read_csv("Real_estate_data.csv")
+    if not selected_state:
+        st.warning("Please select a state from the India overview.")
+        return
 
-    # ✅ Standardize column names (CRITICAL)
-    df.columns = [
-        "rank",
-        "state",
-        "region",
-        "price_per_sqft",
-        "median_price_2024_lakh",
-        "median_price_2025_lakh",
-        "median_price_cr",
-        "median_price_usd",
-        "lot_area_sqm",
-        "living_area_sqft",
-        "avg_bedrooms",
-        "avg_bathrooms",
-        "avg_house_age",
-        "overall_quality",
-        "median_income_lakh",
-        "price_to_income_ratio",
-        "proximity",
-        "market_tier"
-    ]
+    # Step 2: Filter state-level data
+    df_state = state_df[state_df["State / Union Territory"] == selected_state]
 
-    return df
+    if df_state.empty:
+        st.error("No data available for the selected state.")
+        return
 
-df = load_data()
+    row = df_state.iloc[0]
 
-# --------------------------------
-# Sidebar Filters
-# --------------------------------
-st.sidebar.header("🔍 Filter Options")
+    # Step 3: Display State Metrics
+    st.subheader(f"📍 {selected_state}")
 
-region_filter = st.sidebar.multiselect(
-    "Select Region",
-    options=sorted(df["region"].unique()),
-    default=sorted(df["region"].unique())
-)
+    col1, col2, col3 = st.columns(3)
 
-tier_filter = st.sidebar.multiselect(
-    "Select Market Tier",
-    options=sorted(df["market_tier"].unique()),
-    default=sorted(df["market_tier"].unique())
-)
+    col1.metric(
+        "Price per Sqft (₹)",
+        f"₹{row['Price/sqft (₹)']:,}"
+    )
 
-filtered_df = df[
-    (df["region"].isin(region_filter)) &
-    (df["market_tier"].isin(tier_filter))
-]
+    col2.metric(
+        "Median Price 2025 (₹ Lakh)",
+        f"{row['Median House Price (₹ Lakh) -2025']:.2f}"
+    )
 
-# --------------------------------
-# Dataset Preview
-# --------------------------------
-st.subheader("📋 Dataset Preview")
-st.dataframe(filtered_df, use_container_width=True)
+    col3.metric(
+        "YoY Growth (%)",
+        f"{row['YoY Price Growth (%)']*100:.2f}%"
+    )
 
-# --------------------------------
-# Key Metrics
-# --------------------------------
-st.subheader("📌 Key Metrics")
+    st.write("**Region:**", row["Region"])
+    st.write("**Market Tier:**", row["Market Tier"])
 
-col1, col2, col3 = st.columns(3)
+    # Step 4: City Selection
+    available_cities = sorted(
+        city_df[city_df["City"].notna()]["City"].unique()
+    )
 
-col1.metric(
-    "Avg Price / Sqft",
-    f"₹ {int(filtered_df['price_per_sqft'].mean()):,}"
-)
+    selected_city = st.selectbox(
+        "Select a City",
+        available_cities
+    )
 
-col2.metric(
-    "Median Price 2024 (₹ Lakh)",
-    round(filtered_df["median_price_2024_lakh"].mean(), 2)
-)
-
-col3.metric(
-    "Median Price 2025 (₹ Lakh)",
-    round(filtered_df["median_price_2025_lakh"].mean(), 2)
-)
-
-# --------------------------------
-# Growth Calculation
-# --------------------------------
-filtered_df["growth_lakh"] = (
-    filtered_df["median_price_2025_lakh"]
-    - filtered_df["median_price_2024_lakh"]
-)
-
-# --------------------------------
-# Price Comparison Chart
-# --------------------------------
-st.subheader("📊 Median House Price Comparison")
-
-chart_df = filtered_df[
-    ["state", "median_price_2024_lakh", "median_price_2025_lakh"]
-].set_index("state")
-
-st.bar_chart(chart_df)
-
-# --------------------------------
-# Growth Chart
-# --------------------------------
-st.subheader("📈 Price Growth (2024 → 2025)")
-
-growth_chart = filtered_df[["state", "growth_lakh"]].set_index("state")
-st.bar_chart(growth_chart)
-
-# --------------------------------
-# Footer
-# --------------------------------
-st.markdown("---")
-st.caption("Built using Python, Streamlit & GitHub | Real Estate What‑If Market Analyzer")
+    st.session_state.selected_city = selected_city
+  
