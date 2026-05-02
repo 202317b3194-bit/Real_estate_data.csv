@@ -1,140 +1,129 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="Real Estate Analytics", layout="wide")
+# --------------------------------
+# Page Config
+# --------------------------------
+st.set_page_config(
+    page_title="Indian Real Estate Market Dashboard",
+    layout="wide"
+)
 
-# ------------------- DATA LOADING -------------------
+st.title("🏠 Indian Real Estate Market Dashboard")
+st.write("State and region-wise housing price analysis (2024–2025)")
+
+# --------------------------------
+# Load and Clean CSV
+# --------------------------------
 @st.cache_data
 def load_data():
-    return pd.read_excel("Book3.xlsx")
+    df = pd.read_csv("Real_estate_data.csv")
+
+    # ✅ Standardize column names (CRITICAL)
+    df.columns = [
+        "rank",
+        "state",
+        "region",
+        "price_per_sqft",
+        "median_price_2024_lakh",
+        "median_price_2025_lakh",
+        "median_price_cr",
+        "median_price_usd",
+        "lot_area_sqm",
+        "living_area_sqft",
+        "avg_bedrooms",
+        "avg_bathrooms",
+        "avg_house_age",
+        "overall_quality",
+        "median_income_lakh",
+        "price_to_income_ratio",
+        "proximity",
+        "market_tier"
+    ]
+
+    return df
 
 df = load_data()
 
-# ------------------- UTILITY -------------------
-def clean_currency(col):
-    return (
-        col.astype(str)
-        .str.replace("₹", "", regex=False)
-        .str.replace(",", "", regex=False)
-        .astype(float)
-    )
+# --------------------------------
+# Sidebar Filters
+# --------------------------------
+st.sidebar.header("🔍 Filter Options")
 
-df["Price per Sqft"] = clean_currency(df["Price per Sqft (INR)S"])
-df["Sale Price"] = clean_currency(df["Estimated Sale Price (INR)"])
+region_filter = st.sidebar.multiselect(
+    "Select Region",
+    options=sorted(df["region"].unique()),
+    default=sorted(df["region"].unique())
+)
 
-# ------------------- PERSON 1 -------------------
-def city_selector(df):
-    st.header("Person 1 – City Selection")
+tier_filter = st.sidebar.multiselect(
+    "Select Market Tier",
+    options=sorted(df["market_tier"].unique()),
+    default=sorted(df["market_tier"].unique())
+)
 
-    city = st.selectbox(
-        "Select City",
-        sorted(df["City"].unique())
-    )
+filtered_df = df[
+    (df["region"].isin(region_filter)) &
+    (df["market_tier"].isin(tier_filter))
+]
 
-    st.session_state["selected_city"] = city
+# --------------------------------
+# Dataset Preview
+# --------------------------------
+st.subheader("📋 Dataset Preview")
+st.dataframe(filtered_df, use_container_width=True)
 
-# ------------------- PERSON 2 -------------------
-def city_dashboard(df):
-    st.header("Person 2 – City Level Dashboard")
+# --------------------------------
+# Key Metrics
+# --------------------------------
+st.subheader("📌 Key Metrics")
 
-    if "selected_city" not in st.session_state:
-        st.warning("Please select a city first.")
-        return
+col1, col2, col3 = st.columns(3)
 
-    city = st.session_state["selected_city"]
-    city_df = df[df["City"] == city]
+col1.metric(
+    "Avg Price / Sqft",
+    f"₹ {int(filtered_df['price_per_sqft'].mean()):,}"
+)
 
-    st.subheader(f"📍 {city}")
+col2.metric(
+    "Median Price 2024 (₹ Lakh)",
+    round(filtered_df["median_price_2024_lakh"].mean(), 2)
+)
 
-    col1, col2, col3 = st.columns(3)
+col3.metric(
+    "Median Price 2025 (₹ Lakh)",
+    round(filtered_df["median_price_2025_lakh"].mean(), 2)
+)
 
-    col1.metric(
-        "Avg Price / Sqft (₹)",
-        f"₹{int(city_df['Price per Sqft'].mean()):,}"
-    )
+# --------------------------------
+# Growth Calculation
+# --------------------------------
+filtered_df["growth_lakh"] = (
+    filtered_df["median_price_2025_lakh"]
+    - filtered_df["median_price_2024_lakh"]
+)
 
-    col2.metric(
-        "Avg Sale Price (₹)",
-        f"₹{int(city_df['Sale Price'].mean()):,}"
-    )
+# --------------------------------
+# Price Comparison Chart
+# --------------------------------
+st.subheader("📊 Median House Price Comparison")
 
-    col3.metric(
-        "Avg Rental Yield (%)",
-        f"{city_df['Rental Yield (%)'].mean():.2f}%"
-    )
+chart_df = filtered_df[
+    ["state", "median_price_2024_lakh", "median_price_2025_lakh"]
+].set_index("state")
 
-    st.divider()
+st.bar_chart(chart_df)
 
-    st.write("### Property Type Distribution")
-    st.bar_chart(city_df["Property Type"].value_counts())
+# --------------------------------
+# Growth Chart
+# --------------------------------
+st.subheader("📈 Price Growth (2024 → 2025)")
 
-    st.write(
-        "**Avg Buyer Attraction Score:**",
-        round(city_df["Buyer Attraction Score (1-10)"].mean(), 2)
-    )
+growth_chart = filtered_df[["state", "growth_lakh"]].set_index("state")
+st.bar_chart(growth_chart)
 
-    st.divider()
-
-    locality = st.selectbox(
-        "Select Locality",
-        sorted(city_df["Locality"].unique())
-    )
-
-    st.session_state["selected_locality"] = locality
-
-# ------------------- PERSON 3 -------------------
-def locality_dashboard(df):
-    st.header("Person 3 – Locality Deep Dive")
-
-    if "selected_city" not in st.session_state or "selected_locality" not in st.session_state:
-        st.warning("Please select city & locality first.")
-        return
-
-    city = st.session_state["selected_city"]
-    locality = st.session_state["selected_locality"]
-
-    loc_df = df[
-        (df["City"] == city) &
-        (df["Locality"] == locality)
-    ]
-
-    st.subheader(f"📍 {locality}, {city}")
-
-    col1, col2, col3 = st.columns(3)
-
-    col1.metric(
-        "Avg Price / Sqft (₹)",
-        f"₹{int(loc_df['Price per Sqft'].mean()):,}"
-    )
-
-    col2.metric(
-        "Avg Sale Price (₹)",
-        f"₹{int(loc_df['Sale Price'].mean()):,}"
-    )
-
-    col3.metric(
-        "Avg Rental Yield (%)",
-        f"{loc_df['Rental Yield (%)'].mean():.2f}%"
-    )
-
-    st.divider()
-
-    st.write("### Property Details")
-    st.dataframe(
-        loc_df[[
-            "Property Type",
-            "Built-up Area (sqft)",
-            "Bedrooms (BHK)",
-            "Bathrooms",
-            "Price per Sqft",
-            "Sale Price",
-            "Rental Yield (%)"
-        ]]
-    )
-
-# ------------------- APP FLOW -------------------
-st.title("🏘 Real Estate Market Intelligence System")
-
-city_selector(df)
-city_dashboard(df)
-locality_dashboard(df)
+# --------------------------------
+# Footer
+# --------------------------------
+st.markdown("---")
+st.caption("Built using Python, Streamlit & GitHub | Real Estate What‑If Market Analyzer")
